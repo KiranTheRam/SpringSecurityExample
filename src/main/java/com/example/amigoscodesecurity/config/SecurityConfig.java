@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.example.amigoscodesecurity.model.UserRole.*;
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -33,7 +34,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable() //
+                .csrf().disable() // Cross Site Request Forgery. This should be used when application is used by browsers. Creates a token and expects it back when a get, post, or put request is received. It will match the og token to the one received with the req. If they match all is good, if not then a hacker tried to slip in a request while posing as the user
                 .authorizeHttpRequests((authz) -> authz
                         .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                         .antMatchers("/api/*").hasRole(STUDENT.name())
